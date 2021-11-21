@@ -3,18 +3,17 @@ package proxet.tournament.reader;
 import proxet.tournament.generator.dto.Player;
 import proxet.tournament.generator.dto.PlayerWithWaitingTime;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class WaitTimeStatReader {
-    private final File file;
+    private final String filePath;
 
     public WaitTimeStatReader(String filePath) {
-        this.file = new File(filePath);
+        this.filePath = filePath;
     }
 
     /**
@@ -38,21 +37,7 @@ public class WaitTimeStatReader {
      */
     private List<PlayerWithWaitingTime> parseFile() throws IOException {
         List<PlayerWithWaitingTime> resultPlayers = new ArrayList<>();
-        Reader reader = new FileReader(file);
-        StringBuilder builder = new StringBuilder();
-
-        int i = reader.read();
-        while (i >= 0) {
-            if ((char) i == '\n') {
-                resultPlayers.add(getRecord(builder.toString()));
-                builder = new StringBuilder();
-            } else {
-                builder.append((char) i);
-            }
-            i = reader.read();
-        }
-        //write last record.
-        resultPlayers.add(getRecord(builder.toString()));
+        Files.lines(Paths.get(filePath)).forEach(line -> resultPlayers.add(getRecord(line)));
         return resultPlayers;
     }
 
