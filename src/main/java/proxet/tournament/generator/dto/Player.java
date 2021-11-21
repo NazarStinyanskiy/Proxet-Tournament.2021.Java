@@ -17,4 +17,12 @@ public class Player {
     public int getVehicleType() {
         return vehicleType;
     }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "nickname='" + nickname + '\'' +
+                ", vehicleType=" + vehicleType +
+                '}';
+    }
 }
